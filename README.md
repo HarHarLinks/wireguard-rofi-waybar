@@ -11,7 +11,7 @@ It should be easy to adapt it for other bars than Waybar or similar as well. You
 # Usage
 
 When you're connected to wireguard using NetworkManager, a segment showing the VPN's name and your IP will appear in your Waybar. You can click this segment to open a rofi menu that allows you to connect or disconnect to and from any WireGuard connection available through NetworkManager.
-The rofi menu is color coded by connection status (dis/connected).
+The rofi menu is color coded by connection status (dis/connected). When toggling an action, a notification is sent to your notification daemon by `notify-send`, if you have it installed.
 You can also bind a hotkey to call the rofi menu without using the mouse.
 
 Follow the [installation guide](#Installation) to set this up.
@@ -20,15 +20,19 @@ For information on how to use `wireguard.sh`'s script mode, take a look at its c
 
 # Requirements
 
-- [NetworkManager](https://wiki.gnome.org/Projects/NetworkManager) (specifically nmcli)
+- [bash](https://www.gnu.org/software/bash/)
+- [NetworkManager](https://wiki.gnome.org/Projects/NetworkManager) (specifically `nmcli`)
 - for the indicator: [Waybar](https://github.com/Alexays/Waybar/)
 - for the toggle menu: [Rofi](https://github.com/davatorium/rofi) or since you're likely using Wayland, [its fork with Wayland support](https://github.com/lbonn/rofi)
+- optionally, for notifications: `notify-send` ([libnotify](https://developer.gnome.org/notification-spec/)) and a notification daemon
 
 I'm personally using it on Archlinux with the following packages:
 
+- core/bash
 - extra/networkmanager
 - community/waybar
 - aur/rofi-lbonn-wayland-git
+- extra/libnotify
 - (community/sway)
 
 # Installation
