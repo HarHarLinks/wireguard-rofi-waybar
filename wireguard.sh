@@ -56,8 +56,8 @@ function get_conns {
 				then
 					continue
 				fi
-				connected+=("$device: $value")
-			done < <($wgconns $device)
+				connected+=("$name: $value")
+			done < <($wgconns $name)
 		else
 			available+=("$name")
 		fi
@@ -85,7 +85,7 @@ function print_conns {
 			first="no"
 		done
 		echo ""
-	fi	
+	fi
 }
 
 function array_contains {
