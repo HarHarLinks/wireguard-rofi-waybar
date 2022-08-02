@@ -26,7 +26,7 @@ For information on how to use `wireguard.sh`'s script mode, take a look at its c
 - for the toggle menu: [Rofi](https://github.com/davatorium/rofi) or since you're likely using Wayland, [its fork with Wayland support](https://github.com/lbonn/rofi)
 - optionally, for notifications: `notify-send` ([libnotify](https://developer.gnome.org/notification-spec/)) and a notification daemon
 
-I'm personally using it on Archlinux with the following packages:
+I'm personally using it on Arch Linux with the following packages:
 
 - core/bash
 - extra/networkmanager
@@ -71,3 +71,7 @@ bindsym $mod+Shift+w exec "rofi -modi 'WireGuard:~/.config/waybar/wireguard-rofi
 # Contributions
 
 ... and suggestions are welcome, just open an issue or pull request.
+
+# See also
+
+If you use systemd rather than NetworkManager, you might be interested in [wireguard-manager](https://github.com/Klafyvel/wireguard-manager).
