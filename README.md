@@ -25,6 +25,7 @@ For information on how to use `wireguard.sh`'s script mode, take a look at its c
 - for the indicator: [Waybar](https://github.com/Alexays/Waybar/)
 - for the toggle menu: [Rofi](https://github.com/davatorium/rofi) or since you're likely using Wayland, [its fork with Wayland support](https://github.com/lbonn/rofi)
 - optionally, for notifications: `notify-send` ([libnotify](https://developer.gnome.org/notification-spec/)) and a notification daemon
+- a `pkill` implementation such as the [procps](https://gitlab.com/procps-ng/procps) version, which you likely already have
 
 I'm personally using it on Arch Linux with the following packages:
 
@@ -34,6 +35,7 @@ I'm personally using it on Arch Linux with the following packages:
 - aur/rofi-lbonn-wayland-git
 - extra/libnotify
 - (community/sway)
+- (core/procps-ng)
 
 # Installation
 
@@ -46,8 +48,6 @@ I use this repo as a submodule to my dotfiles at `~/.config/waybar/wireguard-rof
 
 This will make a custom segment available to your Waybar. Leave the `"on-click"` line out if not using rofi. The `pkill` command and `"signal"` are used to instantly update the display after calling the rofi menu by clicking on the Waybar segment, so modify both occurences of the value (`6`) to a signal that is still unused in your Waybar config.
 
-Tip: You can add rofi arguments the `"exec"` setting to 
-
 ```
     "custom/wireguard": {
         "format": "{}<big> 嬨</big>",
@@ -59,9 +59,11 @@ Tip: You can add rofi arguments the `"exec"` setting to
     }
 ```
 
+Tip: You can add more rofi arguments to the `"on-click"` setting if desired.
+
 ## Add hotkey to sway
 
-I personally use the [sway](https://swaywm.org/) tiled window manager. You can bind a key combo by using a similar command to the `"exec"` setting in your Waybar config.
+I personally use the [sway](https://swaywm.org/) tiled window manager. You can bind a key combo by using a similar command to the `"on-click"` setting in your Waybar config.
 
 ```
 # wireguard
