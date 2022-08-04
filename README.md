@@ -25,7 +25,8 @@ For information on how to use `wireguard.sh`'s script mode, take a look at its c
 - for the indicator: [Waybar](https://github.com/Alexays/Waybar/)
 - for the toggle menu: [Rofi](https://github.com/davatorium/rofi) or since you're likely using Wayland, [its fork with Wayland support](https://github.com/lbonn/rofi)
 - optionally, for notifications: `notify-send` ([libnotify](https://developer.gnome.org/notification-spec/)) and a notification daemon
-- a `pkill` implementation such as the [procps](https://gitlab.com/procps-ng/procps) version, which you likely already have
+- optionally, for updating waybar instantly upon dis/connecting: a `pkill` implementation such as the [procps](https://gitlab.com/procps-ng/procps) version, which you likely already have
+- optionally, for the `short` format option: `sed`
 
 I'm personally using it on Arch Linux with the following packages:
 
@@ -36,6 +37,7 @@ I'm personally using it on Arch Linux with the following packages:
 - extra/libnotify
 - (community/sway)
 - (core/procps-ng)
+- (core/sed)
 
 # Installation
 
@@ -46,24 +48,42 @@ I use this repo as a submodule to my dotfiles at `~/.config/waybar/wireguard-rof
 
 ## Configure Waybar
 
-This will make a custom segment available to your Waybar. Leave the `"on-click"` line out if not using rofi. The `pkill` command and `"signal"` are used to instantly update the display after calling the rofi menu by clicking on the Waybar segment, so modify both occurences of the value (`6`) to a signal that is still unused in your Waybar config.
+This will make a custom segment available to your Waybar.
+Leave the `"on-click"` line out if not using rofi.
 
 ```
     "custom/wireguard": {
         "format": "{}<big> 嬨</big>",
         "exec": "~/.config/waybar/wireguard-rofi-waybar/wireguard.sh",
-        "on-click": "rofi -modi 'WireGuard:~/.config/waybar/wireguard-rofi-waybar/wireguard-rofi.sh' -show WireGuard; pkill -SIGRTMIN+6 waybar",
-        "signal": 6,
+        "on-click": "rofi -modi 'WireGuard:~/.config/waybar/wireguard-rofi-waybar/wireguard-rofi.sh' -show WireGuard",
         "interval": 60,
-        "tooltip": false
+        "return-type": "json"
     }
 ```
 
-Tip: You can add more rofi arguments to the `"on-click"` setting if desired.
+### Optional Configuration
+
+The `pkill` command and `"signal"` are used to instantly update the display after calling the rofi menu by clicking on the Waybar segment, so modify both occurences of the value (`6`) to a signal that is still unused in your Waybar config.
+
+**Tip**: By default, both the VPN name and client IP are shown. For some smaller screens a more compact format might be desireable, which is supported by the `short` switch if you have `sed` installed. Edit your config to `"exec": "~/.config/waybar/wireguard-rofi-waybar/wireguard.sh short",` to enable it. The complete information is still available via the tooltip!
+
+**Tip**: You can add more rofi arguments to the `"on-click"` setting if desired, e.g. to set your theme.
+
+```
+    "custom/wireguard": {
+        "format": "{}<big> 嬨</big>",
+        "exec": "~/.config/waybar/wireguard-rofi-waybar/wireguard.sh short",
+        "on-click": "rofi -modi 'WireGuard:~/.config/waybar/wireguard-rofi-waybar/wireguard-rofi.sh' -show WireGuard -theme mytheme; pkill -SIGRTMIN+6 waybar",
+        "signal": 6,
+        "interval": 60,
+        "return-type": "json"
+    }
+```
 
 ## Add hotkey to sway
 
-I personally use the [sway](https://swaywm.org/) tiled window manager. You can bind a key combo by using a similar command to the `"on-click"` setting in your Waybar config.
+I personally use the [sway](https://swaywm.org/) tiled window manager.
+You can bind a key combo by using a similar command to the `"on-click"` setting in your Waybar config.
 
 ```
 # wireguard

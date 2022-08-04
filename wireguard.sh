@@ -5,24 +5,40 @@
 # requires nmcli on your path
 # install to the same directory as wireguard-rofi.sh
 #
-# usage: ./wireguard.sh [menu|toggle NAME]
+# usage: ./wireguard.sh [short|menu|toggle NAME]
 # no argument:   print current connections
+# short:         print current connections in short format
 # menu:          print all connections
 # toggle NAME:   toggle connection NAME
 
 if ! command -v nmcli >/dev/null 2>&1; then
-	echo "err: nmcli not found"
+	echo "ERROR: 'nmcli' not found"
+	echo "This tool is a 'nmcli' frontend, hence you should install NetworkManager before trying to use it."
 	exit 1
 fi
 
 nargs=$#
+get="no"
 showmenu="no"
+short="no"
 dotoggle="no"
-if [[ $nargs == 1 ]]
+if [[ $nargs == 0 ]]
+then
+	get="yes"
+elif [[ $nargs == 1 ]]
 then
 	if [[ $1 == "menu" ]]
 	then
 		showmenu="yes"
+	elif [[ $1 == "short" ]]
+	then
+		if ! command -v sed >/dev/null 2>&1; then
+			echo "ERROR: 'sed' not found"
+			echo "Please install 'sed' to enable the 'short' option."
+			exit 1
+		fi
+		get="yes"
+		short="short"
 	fi
 elif [[ $nargs == 2 ]]
 then
@@ -68,7 +84,9 @@ function print_conns {
 	local first="yes"
 	local array_print="$1[@]"
 	local array_print=("${!array_print}")
-	if [[ $2 == "list" ]]
+	local text=""
+	local tooltip=""
+	if [[ "$2" == "list" ]]
 	then
 		for c in "${array_print[@]}"
 		do
@@ -79,10 +97,18 @@ function print_conns {
 		do
 			if [[ "$first" != "yes" ]]
 			then
-				echo -n " | "
+					text="$text | "
+					tooltip="$tooltip\n"
 			fi
-			echo -n "$c"
+			if [[ "$2" == "short" ]]
+			then
+				text="$text$(echo -n $c | sed -E 's/^(.+): ([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\/[0-9]+)$/\1/')"
+			else
+				text="$text$c"
+			fi
+			tooltip="$tooltip$c"
 			first="no"
+			echo "{\"text\": \"$text\", \"tooltip\": \"$tooltip\"}"
 		done
 		echo ""
 	fi
@@ -103,10 +129,10 @@ function array_contains {
 	echo "no"
 }
 
-if [[ $nargs == 0 ]]
+if [[ $get == "yes" ]]
 then
 	get_conns "$wgactive"
-	print_conns connected
+	print_conns connected "$short"
 
 elif [[ $showmenu == "yes" ]]
 then
