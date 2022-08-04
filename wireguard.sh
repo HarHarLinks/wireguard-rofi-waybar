@@ -86,6 +86,10 @@ function print_conns {
 	local array_print=("${!array_print}")
 	local text=""
 	local tooltip=""
+	if [ "${#array_print[@]}" -le 0 ]
+	then
+		return
+	fi
 	if [[ "$2" == "list" ]]
 	then
 		for c in "${array_print[@]}"
