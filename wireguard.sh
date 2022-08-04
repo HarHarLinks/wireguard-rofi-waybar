@@ -108,9 +108,8 @@ function print_conns {
 			fi
 			tooltip="$tooltip$c"
 			first="no"
-			echo "{\"text\": \"$text\", \"tooltip\": \"$tooltip\"}"
 		done
-		echo ""
+		echo "{\"text\": \"$text\", \"tooltip\": \"$tooltip\"}"
 	fi
 }
 
